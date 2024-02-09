@@ -8,6 +8,13 @@ module.exports = (sequelize) => {
             allowNull: false,
             primaryKey: true,
           },
-          
+        date: {
+            type: DataTypes.DATE,
+            allowNull: false,
+        },
+        hour: {
+            type: DataTypes.NUMBER,
+            allowNull: false,
+        }
     })
 }
