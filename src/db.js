@@ -3,7 +3,10 @@ const { Sequelize } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
 const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
-
+const quotesModel=require('./models/QuotesModels/quotes')
+const serviceModel=require('./models/ServicesModels/services')
+const usersModel=require('./models/UserModels/users')
+const userLoginModel=require('./models/UserModels/userLogin')
 
 const sequelize = new Sequelize(
    `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/turnos`,
@@ -13,11 +16,9 @@ const sequelize = new Sequelize(
    }
 );
 
-const basename = path.basename(__filename);
+const modelDefiners = [quotesModel,serviceModel,userLoginModel,usersModel];
+const basename = path.basename(__filename); // Aquí está la definición de basename
 
-const modelDefiners = [];
-
-// Leemos todos los archivos de la carpeta Models, los requerimos y agregamos al arreglo modelDefiners
 fs.readdirSync(path.join(__dirname, '/models'))
    .filter(
       (file) =>
@@ -29,9 +30,8 @@ fs.readdirSync(path.join(__dirname, '/models'))
       modelDefiners.push(require(path.join(__dirname, '/models', file)));
    });
 
-// Injectamos la conexion (sequelize) a todos los modelos
 modelDefiners.forEach((model) => model(sequelize));
-// Capitalizamos los nombres de los modelos ie: product => Product
+
 let entries = Object.entries(sequelize.models);
 let capsEntries = entries.map((entry) => [
    entry[0][0].toUpperCase() + entry[0].slice(1),
@@ -39,15 +39,18 @@ let capsEntries = entries.map((entry) => [
 ]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-// En sequelize.models están todos los modelos importados como propiedades
-// Para relacionarlos hacemos un destructuring
-const {} = sequelize.models;
+const { Quotes, Service, User, UserLogin } = sequelize.models;
 
+UserLogin.hasOne(User, { foreignKey: 'userLoginId' });
+User.belongsTo(UserLogin, { foreignKey: 'userLoginId' });
 
-// Aca vendrian las relaciones
-// Product.hasMany(Reviews);
+User.hasMany(Quotes, { foreignKey: 'userId' });
+Quotes.belongsTo(User, { foreignKey: 'userId' });
+
+Service.belongsToMany(Quotes, { through: 'ServiceQuotes' });
+Quotes.belongsToMany(Service, { through: 'ServiceQuotes' });
 
 module.exports = {
-   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
-   conn: sequelize, // para importart la conexión { conn } = require('./db.js');
+   ...sequelize.models,
+   conn: sequelize,
 };
