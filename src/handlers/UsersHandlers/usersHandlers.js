@@ -1,7 +1,7 @@
 const {
   getAllUsersController,
   postUserController,
-} = require("../../controllers/usersControllers");
+} = require("../../controllers/UsersControllers/usersControllers");
 
 const getAllUsers = async (req, res) => {
   try {
@@ -30,4 +30,4 @@ const postUsers = async (req, res) => {
   }
 };
 
-module.exports = {getAllUsers,postUsers};
+module.exports = { getAllUsers, postUsers };

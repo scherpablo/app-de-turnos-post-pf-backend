@@ -3,10 +3,10 @@ const { Sequelize } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
 const { BDD_LOCAL }  = process.env;
-const quotesModel=require('./models/QuotesModels/quotes')
-const serviceModel=require('./models/ServicesModels/services')
-const usersModel=require('./models/UserModels/users')
-const userLoginModel=require('./models/UserModels/userLogin')
+const quotesModel=require('./models/QuotesModels/quotesModels')
+const serviceModel=require('./models/ServicesModels/servicesModels')
+const usersModel=require('./models/UserModels/usersModels')
+const userLoginModel=require('./models/UserModels/userLoginModels')
 
 const sequelize = new Sequelize(
    `${BDD_LOCAL}`,
