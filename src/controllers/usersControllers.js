@@ -8,7 +8,7 @@ const getAllUsersController = async () => {
   if (!data || data.length === 0) {
     return {
       error: true,
-      response: "no hay usuarios creados",
+      response: "No hay usuarios creados.",
     };
   }
 
@@ -16,12 +16,32 @@ const getAllUsersController = async () => {
 };
 
 const postUserController = async (data) => {
-  const { name, surname, birthdate, dni, email, telephone } = data;
-  if (!name || !surname || !birthdate || !dni || !email || !telephone) {
-    return {
-      error: true,
-      response: "no hay usuarios creados",
-    };
-  }
-};
-module.exports = getAllUsersController;
+    const { name, surname, birthdate, dni, email, telephone } = data;
+    if (!name || !surname || !birthdate || !dni || !email || !telephone) {
+      return {
+        error: true,
+        response: "Faltan datos.",
+      };
+    }
+  
+    const [NewUser, created] = await User.findOrCreate({
+      where: { dni },
+      defaults: {
+        name,
+        surname,
+        birthdate,
+        email,
+        telephone,
+      },
+    });
+  
+    if (!created) {
+      return {
+        error: true,
+        response: "El usuario ya existe.",
+      };
+    }
+  
+    return NewUser;
+  };
+module.exports = {getAllUsersController,postUserController};

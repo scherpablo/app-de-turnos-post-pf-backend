@@ -1,6 +1,9 @@
 const server = require("./src/app.js");
 const { conn } = require("./src/db.js");
+const transporter =require('./src/config/mailer.js')
 const PORT = 3001;
+
+
 
 conn.sync({ alter: false }).then(() => {
   server.listen(PORT, () => {
