@@ -13,7 +13,7 @@ module.exports = (sequelize) => {
             allowNull: false,
         },
         hour: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.TIME,
             allowNull: false,
         }
     })
