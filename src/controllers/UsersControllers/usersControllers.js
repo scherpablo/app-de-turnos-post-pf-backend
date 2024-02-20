@@ -44,4 +44,19 @@ const postUserController = async (data) => {
 
   return NewUser;
 };
-module.exports = { getAllUsersController, postUserController };
+
+const getUserByIdController = async (id) => {
+  const user = await User.findByPk(id);
+  if (!user || user.length === 0) {
+    return {
+      error: true,
+      response: "El usuario no existe.",
+    };
+  }
+  return user;
+};
+module.exports = {
+  getAllUsersController,
+  postUserController,
+  getUserByIdController,
+};

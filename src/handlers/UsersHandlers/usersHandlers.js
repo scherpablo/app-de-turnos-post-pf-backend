@@ -1,6 +1,7 @@
 const {
   getAllUsersController,
   postUserController,
+  getUserByIdController,
 } = require("../../controllers/UsersControllers/usersControllers");
 
 const getAllUsers = async (req, res) => {
@@ -30,4 +31,16 @@ const postUsers = async (req, res) => {
   }
 };
 
-module.exports = { getAllUsers, postUsers };
+const getUserById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await getUserByIdController(id);
+    if (response.error) return res.status(404).json(response.response);
+    const {name,surname,birthdate,dni,telephone}=response
+    return res.status(200).json({id,name,surname,birthdate,dni,telephone});
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { getAllUsers, postUsers,getUserById };
