@@ -25,6 +25,7 @@ module.exports = (sequelize) => {
       dni: {
         type: DataTypes.STRING,
         allowNull: true,
+        unique: true,
       },
       email: {
         type: DataTypes.STRING,
